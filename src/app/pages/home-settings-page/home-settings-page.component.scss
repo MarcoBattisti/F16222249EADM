@@ -1,0 +1,32 @@
+.image-settings {
+  max-width: 150px;
+}
+
+.desc a {
+  color: #212121;
+  font-weight: bold;
+}
+.text .img {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  border-radius: 50%; }
+.img {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center; }
+.text .subheading {
+  font-size: 24px;
+  color: #837776;
+  font-weight: 300;
+}
+
+.save-highlight{
+  border: 3px #ad2d00 solid;
+  -webkit-transition : border 500ms ease-out;
+  -moz-transition : border 500ms ease-out;
+  -o-transition : border 500ms ease-out;
+}

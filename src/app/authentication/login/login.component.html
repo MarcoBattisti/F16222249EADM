@@ -1,0 +1,40 @@
+<div class="m-0 p-0 clr-row clr-justify-content-center login-wrapper">
+  <div class="cls-col-8">
+    <form clrForm [formGroup]="form" class="login" (ngSubmit)="login()">
+      <section class="title">
+        <div class="clr-row clr-justify-content-center">
+          <div class="clr-col-5">
+            <img class="img-fluid" src="../../../assets/Logo1.png" alt="Logo">
+          </div>
+        </div>
+        <div class="clr-row clr-justify-content-center">
+          <div class="clr-col-5">
+            <h3 class="welcome">Bentornato/a</h3>
+          </div>
+        </div>
+        <div class="clr-row clr-justify-content-center">
+          <div class="clr-col-6">
+            <h5 class="hint">Inserisci email e password</h5>
+          </div>
+        </div>
+      </section>
+      <div class="login-group">
+        <clr-input-container>
+          <label>Email</label>
+          <input clrInput formControlName="email" type="email" [(ngModel)]="form.username" name="email" required />
+          <clr-control-helper>Inserisci la tua email</clr-control-helper>
+        </clr-input-container>
+        <clr-password-container>
+          <label>Password</label>
+          <input clrPassword formControlName="password" type="password" [(ngModel)]="form.password" name="password" required />
+          <clr-control-helper>Inserisci la tua password</clr-control-helper>
+        </clr-password-container>
+        <div class="error" [class.active]="form.hasError('invalid') && form.errors.invalid">
+          Errore: Email o password non corretti.
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+      </div>
+    </form>
+    <ngx-loading [show]="loading"></ngx-loading>
+  </div>
+</div>

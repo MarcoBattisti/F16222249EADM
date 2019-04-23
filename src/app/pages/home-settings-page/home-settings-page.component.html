@@ -1,0 +1,39 @@
+<div class="">
+  <div class="card-title">
+    Introduzione
+  </div>
+
+  <div class="card-text">
+    <form *ngIf="settings != null" clrForm>
+      <div class="text text-center">
+        <input type="file" (change)="uploadImage($event)" accept=".png,.jpg"/>
+        <div class="img mb-4" [ngStyle]="{'background-image': ' url(' + findSettingByName(this.properties[0]).value + ')'}"></div>
+        <div [ngClass]="saveOfTextIsNeeded ? 'save-highlight' : '' " class="desc" [exclude]="'clr-header, clr-vertical-nav'" (clickOutside)="saveText()">
+
+          <ckeditor [editor]="Editor" (change)="onChange($event)" data="{{findSettingByName(this.properties[1]).value}}"></ckeditor>
+
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <hr>
+
+  <div class="card-title">
+    Statistiche Personali
+  </div>
+
+  <br>
+
+  <div *ngIf="personalStats != null" class="card-text">
+    <div class="clr-row" [exclude]="'clr-header, clr-vertical-nav'" (clickOutside)="saveStats()">
+
+      <div class="text text-center clr-col" *ngFor="let stat of personalStats; let i = index;">
+        <input clrInput type="text" [(ngModel)]="personalStats[i].name" [placeholder]="stat.name" (change)="onChangeStats()"/>
+        <input clrInput type="text" [(ngModel)]="personalStats[i].value" [placeholder]="stat.value" (change)="onChangeStats()"/>
+      </div>
+
+    </div>
+  </div>
+</div>

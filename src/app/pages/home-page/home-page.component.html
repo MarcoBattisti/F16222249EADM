@@ -1,0 +1,84 @@
+<div class="content-container">
+  <div class="card clr-row">
+    <div class="clr-col-md card-block">
+      <div class="card-title">
+        Utenti<br>
+        (Ultimi 7 giorni)
+      </div>
+      <div class="chart-container card-text">
+        <ngx-charts-number-card
+          [view]="[150,150]"
+          [cardColor]="color"
+          [bandColor]="bandColor"
+          [results]="usersOnline"
+          (select)="onSelect($event)">
+        </ngx-charts-number-card>
+      </div>
+    </div>
+
+    <div class="clr-col-md-3 card-block">
+      <div class="card-title">
+        Tempo medio di ogni visita<br>
+        (Ultimi 7 giorni)
+      </div>
+      <div class="chart-container card-text">
+        <ngx-charts-number-card
+          [view]="[150,150]"
+          [cardColor]="color"
+          [bandColor]="'#1310A1'"
+          [results]="timeAverage"
+          (select)="onSelect($event)">
+        </ngx-charts-number-card>
+      </div>
+    </div>
+
+    <div class="clr-col-md-7 card-block chart-container">
+      <div class="card-title">
+        Visite settimanali
+      </div>
+      <div class="card-text p-5">
+        <ngx-charts-line-chart
+          [results]="lineChartValues"
+          [gradient]="gradient"
+          [xAxis]="showXAxis"
+          [yAxis]="showYAxis"
+          [legend]="showLegend"
+          [showXAxisLabel]="showXAxisLabel"
+          [showYAxisLabel]="showYAxisLabel"
+          [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="yAxisLabel"
+          [showGridLines]="false"
+          (select)="onSelect($event)">
+        </ngx-charts-line-chart>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="content-container">
+  <div class="card clr-row">
+    <div class="clr-col-md card-block">
+      <div class="card-title">
+        Pagine più visitate
+      </div>
+      <div class="card-text">
+        <table class="table">
+          <thead>
+          <tr>
+            <th>URL</th>
+            <th>Titolo della pagina</th>
+            <th>Visite</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let data of pagesData">
+            <td>{{data.url}}</td>
+            <td>{{data.pageTitle}}</td>
+            <td>{{data.views}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

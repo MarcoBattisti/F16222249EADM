@@ -1,0 +1,70 @@
+<clr-main-container>
+  <clr-header class="header header-7">
+    <div class="branding">
+      <a href="#" class="nav-link">
+        <img src="./assets/Logo1.png" height="50" alt="" style="margin-right: 10px;">
+        <span class="title">  Lisa Psychology - Admin</span>
+      </a>
+    </div>
+    <div class="header-actions">
+      <clr-dropdown>
+        <button class="nav-icon" clrDropdownTrigger>
+          <clr-icon shape="user"></clr-icon>
+          <clr-icon shape="caret down"></clr-icon>
+        </button>
+        <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+          <a href="..." clrDropdownItem>Profilo</a>
+          <a href="..." clrDropdownItem>Impostazioni</a>
+          <a href="javascript:void(0)" clrDropdownItem (click)="openModal = true">Esci</a>
+        </clr-dropdown-menu>
+      </clr-dropdown>
+    </div>
+  </clr-header>
+  <div class="content-container">
+
+    <div class="content-area">
+      <router-outlet *ngIf="loading === false"></router-outlet>
+    </div>
+
+    <clr-vertical-nav [clrVerticalNavCollapsible]="true" class="nav-trigger--bottom" [clr-nav-level]="2">
+      <a clrVerticalNavLink routerLink="home" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="home"></clr-icon>
+        Pagina iniziale
+      </a>
+      <a clrVerticalNavLink routerLink="notes" routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="note"></clr-icon>
+        Note
+      </a>
+      <clr-vertical-nav-group
+        routerLinkActive="active">
+        <clr-icon clrVerticalNavIcon shape="view-cards"></clr-icon>
+        Pagine
+        <clr-vertical-nav-group-children>
+          <a clrVerticalNavLink
+             routerLink="./pages/home-page"
+             routerLinkActive="active">
+            Home
+          </a>
+          <a clrVerticalNavLink
+             routerLink="./pages/news-page"
+             routerLinkActive="active">
+            Notizie
+          </a>
+        </clr-vertical-nav-group-children>
+      </clr-vertical-nav-group>
+    </clr-vertical-nav>
+  </div>
+</clr-main-container>
+
+<clr-modal [(clrModalOpen)]="openModal">
+  <h3 class="modal-title">Uscire</h3>
+  <div class="modal-body">
+    <p>Sei sicuro/a di voler uscire dalla zona privata ?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="openModal = false">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="logOut()">Ok</button>
+  </div>
+</clr-modal>
+
+<ngx-loading [show]="loading"></ngx-loading>
