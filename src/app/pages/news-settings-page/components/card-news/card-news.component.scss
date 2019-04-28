@@ -1,0 +1,14 @@
+// Small devices (landscape phones, less than 768px)
+@media (max-width: 767px) {
+
+  .important-news-header {
+    max-width: 70%;
+  }
+}
+
+@media (min-width: 767px) {
+
+  .important-news-header {
+    max-width: 20vw;
+  }
+}

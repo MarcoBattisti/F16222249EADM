@@ -1,0 +1,91 @@
+<div>
+  <div  id="topPage" class="content-container">
+      <div class="clr-row content-container clr-justify-content-center clr-align-items-center">
+        <div class="clr-col-4 clr-col-md-2">
+          <button [routerLink]="['new']" type="button" class="btn btn-icon">
+            <clr-icon shape="plus"></clr-icon> Crea
+          </button>
+        </div>
+        <div class="clr-col clr-row clr-align-items-center text-center">
+          <div class="clr-col-md-1">
+            Filtra:
+          </div>
+          <div class="clr-col">
+            <ng-select
+              [(ngModel)] = "selected"
+              (ngModelChange)="onSelect(selected)"
+              [items]="postTopics"
+              [multiple]="true"
+              [closeOnSelect]="true"
+              [searchable]="false"
+              placeholder="Seleziona gli argomenti">
+            </ng-select>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <div *ngIf="pagedPostsAreLoaded && listOfPosts != null && listOfPosts.length > 0" class="clr-row content-container">
+
+    <div class="clr-col-md-3 card card-block p-0 card-news-margin" *ngFor="let post of listOfPosts; let i = index">
+      <div class="card-header text-right mb-1">
+        <a class="mr-1" [routerLink]="[post.id]"><clr-icon shape="note" size="25"></clr-icon></a>
+        <a class="mr-1" (click)="setImportant(i, !post.main_topic)"><clr-icon [ngClass]="post.main_topic ? 'is-solid' : ''" shape="star" class="is-warning" size="25"></clr-icon></a>
+        <a (click)="openDeleteModal(post)"><clr-icon shape="trash" class="is-error" size="25"></clr-icon></a>
+      </div>
+
+      <app-card-news [data]="post"></app-card-news>
+
+      <clr-modal *ngIf="openNewsDeleteModal" [ngModel]="modalPost"  [(clrModalOpen)]="openNewsDeleteModal" name="modalPost" ngDefaultControl>
+        <h3 class="modal-title">Eliminare</h3>
+        <div class="modal-body">
+          <p>Sei sicuro/a di voler eliminare questa notizia?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" (click)="openNewsDeleteModal = false">Indietro</button>
+          <button type="button" class="btn btn-primary" (click)="delete(modalPost.id)">Ok</button>
+        </div>
+      </clr-modal>
+
+    </div>
+  </div>
+
+  <div class="clr-row m-1">
+    <!-- [START] NG SELECT column [START] -->
+    <div class="clr-col-md-1 clr-col-4">
+      <ng-select
+        [(ngModel)] = "pageSize"
+        (ngModelChange)="onSelectPageSize(pageSize)"
+        [items]="[10,20,30,40,50]"
+        [closeOnSelect]= "true"
+        [searchable]= "false"
+        [clearable] = "false">
+      </ng-select>
+    </div>
+    <!-- [END] NG SELECT column [END] -->
+
+    <!-- [START] Buttons column [START] -->
+    <div class="clr-col btn-group btn-icon">
+      <button type="button" class="btn" [disabled]="pagination.prev_page_url == null" (click)="changePage(pagination.current_page-1)"  pageScroll [pageScrollDuration]="250" [pageScrollOffset]="70" [pageScrollInterruptible]="false" href="#topPage">
+        <clr-icon shape="caret" style="transform: rotate(270deg);"></clr-icon>
+      </button>
+
+      <button type="button" class="btn" *ngIf="pagination.prev_page_url != null" (click)="changePage(pagination.current_page-1)" pageScroll [pageScrollDuration]="250" [pageScrollOffset]="70" [pageScrollInterruptible]="false" href="#topPage">
+        {{pagination.current_page - 1}}
+      </button>
+
+      <button type="button" class="btn btn-primary">
+        {{pagination.current_page}}
+      </button>
+
+      <button type="button" class="btn" *ngIf="pagination.next_page_url != null" (click)="changePage(pagination.current_page+1)" pageScroll [pageScrollDuration]="250" [pageScrollOffset]="70" [pageScrollInterruptible]="false" href="#topPage" >
+        {{pagination.current_page + 1}}
+      </button>
+
+      <button type="button" class="btn btn-icon" [disabled]="pagination.next_page_url == null" (click)="changePage(pagination.current_page+1)" pageScroll [pageScrollDuration]="250" [pageScrollOffset]="70" [pageScrollInterruptible]="false" href="#topPage" >
+        <clr-icon shape="caret" style="transform: rotate(90deg);"></clr-icon>
+      </button>
+    </div>
+    <!-- [END] Buttons column [END] -->
+  </div>
+</div>

@@ -27,7 +27,7 @@ export class SettingsService {
     return this.http.get<BaseSetting[]>( apiUrl + '/settings/personal/stats');
   }
 
-  updatePersonalStats(apiUrl: string, personalStats: BaseSetting[]) {
+  updatePersonalStats(apiUrl: string, personalStats: BaseSetting[]): Observable<Object> {
     return this.http.put( apiUrl + '/settings/personal/stats', personalStats);
   }
 

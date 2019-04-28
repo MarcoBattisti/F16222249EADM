@@ -1,0 +1,80 @@
+<div class="content-container clr-row clr-justify-content-center" *ngIf="post != null && postTopics != null">
+  <div class="clr-col-md-8 card mt-0">
+    <div class="card-block">
+      <div class="card-header clr-row">
+        <div class="clr-col-7 text-left p-0">
+          <a [routerLink]="['../']"><clr-icon shape="caret" style="transform: rotate(270deg);"></clr-icon> Torna indietro</a>
+        </div>
+        <div class="clr-col text-right">
+          <a class="mr-1" (click)="setImportant(!post.main_topic)"><clr-icon [ngClass]="post.main_topic ? 'is-solid' : ''" shape="star" class="is-warning" size="25"></clr-icon></a>
+          <a (click)="openNewsDeleteModal = true"><clr-icon shape="trash" class="is-error" size="25"></clr-icon></a>
+        </div>
+      </div>
+      <div class="clr-row">
+        <div class="clr-col-md-12">
+          <div class="fit-content" [exclude]="'ng-snotify, clr-header, clr-vertical-nav'" (clickOutside)="saveText(saveTitle)">
+            <h2 contenteditable="true" [(ngModel)]="post.title" (ngModelChange)="saveTitle = true" [ngClass]="saveTitle ? 'save-highlight' : '' "  name="title" ngDefaultControl></h2>
+          </div>
+          <!-- Tag -->
+          <div class="clr-row pt-1">
+            <div class="clr-col-3 clr-col-md-1">
+              <clr-icon shape="tag" class="is-success"></clr-icon> Tag:
+            </div>
+            <div class="clr-col clr-col-md-3 fit-content" [exclude]="'ng-snotify, clr-header, clr-vertical-nav'" (clickOutside)="saveText(saveTag)">
+              <ng-select
+                [(ngModel)] = "post.topic"
+                (ngModelChange)="saveTag = true"
+                [items]="postTopics"
+                [closeOnSelect]= "true"
+                [clearable] = "false"
+                [multiple]="false"
+                [addTag]="true">
+              </ng-select>
+            </div>
+          </div>
+          <!-- Tag -->
+          <!-- Created on -->
+          <div class="clr-row pt-1">
+            <div class="clr-col-5 clr-col-md-2">
+              <clr-icon shape="calendar"></clr-icon>  Creato il:
+            </div>
+            <div class="clr-col">
+              {{post.date | date:"dd/MM/yy"}}
+            </div>
+          </div>
+          <!-- Created on -->
+          <div class="text-center pt-1">
+            <input [hidden]="true" type="file" (change)="uploadImage($event)" accept="image/*" #file/>
+            <img class="img-fluid card-img" [src]=post.image_link [alt]="post.image_link" (click)="file.click()">
+          </div>
+          <div [ngClass]="saveBody ? 'save-highlight' : '' " [exclude]="'ng-snotify, clr-header, clr-vertical-nav'" (clickOutside)="saveText(saveBody)">
+            <ckeditor [editor]="Editor" (change)="onChange($event)" data="{{post.body}}"></ckeditor>
+          </div>
+          <hr>
+          <div class="clr-row">
+            <div class="clr-col-3 clr-col-md-1">
+              <p>Autore: </p>
+            </div>
+            <div class="fit-content" [exclude]="'ng-snotify, clr-header, clr-vertical-nav'" (clickOutside)="saveText(saveAuthor)">
+              <h4 [ngClass]="saveAuthor ? 'save-highlight' : '' " [(ngModel)]="post.author" (ngModelChange)="saveAuthor = true" name="author" ngDefaultControl contenteditable="true"></h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="post.id == null" class="p-1">
+        <button type="button" class="btn btn-primary" (click)="createPost()">Salva</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<clr-modal [(clrModalOpen)]="openNewsDeleteModal">
+  <h3 class="modal-title">Eliminare</h3>
+  <div class="modal-body">
+    <p>Sei sicuro/a di voler eliminare questa notizia?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="openNewsDeleteModal = false">Indietro</button>
+    <button type="button" class="btn btn-primary" (click)="delete()">Ok</button>
+  </div>
+</clr-modal>

@@ -1,13 +1,14 @@
-<div class="">
-  <div class="card-title">
-    Introduzione
-  </div>
+<div>
+  <div *ngIf="settings != null" class="card-text">
 
-  <div class="card-text">
-    <form *ngIf="settings != null" clrForm>
+    <h3 class="setting-header-border font-weight-bold">
+      Introduzione
+    </h3>
+
+    <form clrForm>
       <div class="text text-center">
-        <input type="file" (change)="uploadImage($event)" accept=".png,.jpg"/>
-        <div class="img mb-4" [ngStyle]="{'background-image': ' url(' + findSettingByName(this.properties[0]).value + ')'}"></div>
+        <input [hidden]="true" type="file" (change)="uploadIntroductionImage($event)" accept="image/*" #file/>
+        <div class="img mb-4" [ngStyle]="{'background-image': ' url(' + findSettingByName(this.properties[0]).value + ')'}" (click)="file.click()"></div>
         <div [ngClass]="saveOfTextIsNeeded ? 'save-highlight' : '' " class="desc" [exclude]="'clr-header, clr-vertical-nav'" (clickOutside)="saveText()">
 
           <ckeditor [editor]="Editor" (change)="onChange($event)" data="{{findSettingByName(this.properties[1]).value}}"></ckeditor>
@@ -18,22 +19,87 @@
     </form>
   </div>
 
-  <hr>
-
-  <div class="card-title">
-    Statistiche Personali
-  </div>
-
-  <br>
-
   <div *ngIf="personalStats != null" class="card-text">
+
+    <h3 class="setting-header-border font-weight-bold">
+      Statistiche Personali
+    </h3>
+
     <div class="clr-row" [exclude]="'clr-header, clr-vertical-nav'" (clickOutside)="saveStats()">
 
       <div class="text text-center clr-col" *ngFor="let stat of personalStats; let i = index;">
-        <input clrInput type="text" [(ngModel)]="personalStats[i].name" [placeholder]="stat.name" (change)="onChangeStats()"/>
-        <input clrInput type="text" [(ngModel)]="personalStats[i].value" [placeholder]="stat.value" (change)="onChangeStats()"/>
-      </div>
+        <div class="card card-block" [ngClass]="saveOfStatsIsNeeded && statsChanged == i ? 'save-highlight' : '' ">
 
+          <div class="block-18">
+            <div class="text">
+              <h1 contenteditable="true" class="font-weight-bold" [(ngModel)]="personalStats[i].value" (ngModelChange)="onChangeStats(i)" name="statValue" ngDefaultControl></h1>
+              <span contenteditable="true" [(ngModel)]="personalStats[i].name" (ngModelChange)="onChangeStats(i)" name="statName" ngDefaultControl></span>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
   </div>
+
+  <div *ngIf="carouselItems != null" class="card-text">
+
+    <h3 class="setting-header-border font-weight-bold">
+      Carousels
+    </h3>
+
+    <div class="clr-row" [exclude]="'clr-header, clr-vertical-nav'" (clickOutside)="saveCarousel()">
+      <div class="card m-1 clr-col-md-3 clr-col-sm" *ngFor="let carouselItem of carouselItems; let i = index;" [ngClass]="saveOfCarouselIsNeeded && carouselChanged == i ? 'save-highlight' : '' ">
+        <div class="card-header text-right">
+          <a (click)="openCarouselDeleteModal = true"><clr-icon shape="trash" class="is-solid is-error" size="20"></clr-icon></a>
+        </div>
+        <input [hidden]="true" (change)="uploadCarouselmage($event, i)" type="file" accept="image/*" #file>
+        <a class="card clickable" (click)="file.click()">
+          <div class="card-img">
+            <img [src]="carouselItem.backgroundLink" [alt]="carouselItem.author" />
+          </div>
+        </a>
+        <div class="card-block">
+          <p contenteditable="true" class="card-text" [(ngModel)]="carouselItems[i].body" (ngModelChange)="onChangeCarousel(i)" name="carouselBody" ngDefaultControl></p>
+          <i contenteditable="true" class="font-weight-bold" [(ngModel)]="carouselItems[i].author" (ngModelChange)="onChangeCarousel(i)" name="carouselAuthor" ngDefaultControl></i>
+        </div>
+
+        <clr-modal [(clrModalOpen)]="openCarouselDeleteModal">
+          <h3 class="modal-title">Eliminare</h3>
+          <div class="modal-body">
+            <p>Sei sicuro/a di voler eliminare questo carousel ?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" (click)="openCarouselDeleteModal = false">Indietro</button>
+            <button type="button" class="btn btn-primary" (click)="deleteCarousel(i)">Ok</button>
+          </div>
+        </clr-modal>
+
+      </div>
+
+      <div *ngIf="isCarouselCreationMode" class="card m-1 clr-col-md-3 clr-col-sm">
+        <input [hidden]="true" (change)="uploadTempCarouselmage($event)" type="file" accept="image/*" #file>
+        <a class="card clickable" (click)="file.click()">
+          <div class="card-img">
+            <img [src]="tempCarousel.backgroundLink" alt=""/>
+          </div>
+        </a>
+        <div class="card-block">
+          <p contenteditable="true" class="card-text" [(ngModel)]="tempCarousel.body"  name="carouselBody" ngDefaultControl></p>
+          <i contenteditable="true" class="font-weight-bold" [(ngModel)]="tempCarousel.author"  name="carouselAuthor" ngDefaultControl></i>
+        </div>
+        <div class="card-footer">
+          <a class="btn btn-success" (click)="saveTempCarousel()">Salva</a>
+          <a class="btn btn-danger" (click)="deleteTempCarousel()">Cancella</a>
+        </div>
+      </div>
+
+      <button *ngIf="!isCarouselCreationMode" type="button" class="btn btn-icon m-1 clr-align-self-center" (click)="openCreationMode()">
+        <clr-icon shape="plus-circle" class="is-solid"></clr-icon> Aggiungi nuovo carousel
+      </button>
+
+    </div>
+
+  </div>
+
 </div>

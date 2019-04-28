@@ -1,0 +1,26 @@
+<!-- News jumbotron -->
+<div class="text-center">
+  <!-- Grid column -->
+  <div class="clr-col-md">
+
+    <!-- Featured image -->
+    <img src="{{data.image_link}}" class="img-fluid" alt="{{data.topic}}">
+
+  </div>
+  <!-- Grid column -->
+
+  <!-- Grid column -->
+  <div class="clr-col-md text-md-left mt-1 mb-1">
+
+    <clr-icon shape="tag" class="is-success"></clr-icon>  {{data.topic}}
+
+    <h4 class="font-weight-bold">{{data.title}}</h4>
+
+    <div [innerHTML]="(data.body.length>6) ? (data.body | slice:0:250)+'..' : (data.body)"></div>
+    <p class="font-weight-normal">da <a><strong>{{data.author}}</strong></a>, {{data.date | date:"dd/MM/yy"}}</p>
+
+  </div>
+  <!-- Grid column -->
+
+</div>
+<!-- News jumbotron -->

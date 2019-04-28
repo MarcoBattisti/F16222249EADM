@@ -17,6 +17,11 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { ContenteditableModule } from '@ng-stack/contenteditable';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { NgxPageScrollModule } from 'ngx-page-scroll';
+import {SnotifyModule, SnotifyService, SnotifyToastConfig, ToastDefaults} from 'ng-snotify';
+import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 
 import {RequestInterceptor} from './interceptors/request-interceptor';
 import { Error404Component } from './error-pages/error404/error404.component';
@@ -25,7 +30,30 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 import { BasePageComponent } from './pages/base-page/base-page.component';
 import { NotesPageComponent } from './pages/notes-page/notes-page.component';
 import { HomeSettingsPageComponent } from './pages/home-settings-page/home-settings-page.component';
+import { NewsSettingsPageComponent } from './pages/news-settings-page/news-settings-page.component';
+import {CardNewsComponent} from './pages/news-settings-page/components/card-news/card-news.component';
+import {SingleNewsComponent} from './pages/news-settings-page/components/single-news/single-news.component';
 
+declare var Hammer: any;
+export class MyHammerConfig extends HammerGestureConfig {
+  overrides = <any> {
+    'pan': { direction: Hammer.DIRECTION_All },
+    'swipe': { direction: Hammer.DIRECTION_VERTICAL },
+  };
+
+  buildHammer(element: HTMLElement) {
+    const mc = new Hammer(element, {
+      touchAction: 'auto',
+      inputClass: Hammer.SUPPORT_POINTER_EVENTS ? Hammer.PointerEventInput : Hammer.TouchInput,
+      recognizers: [
+        [Hammer.Swipe, {
+          direction: Hammer.DIRECTION_HORIZONTAL
+        }]
+      ]
+    });
+    return mc;
+  }
+}
 
 @NgModule({
   declarations: [
@@ -35,7 +63,10 @@ import { HomeSettingsPageComponent } from './pages/home-settings-page/home-setti
     LoginComponent,
     BasePageComponent,
     NotesPageComponent,
-    HomeSettingsPageComponent
+    HomeSettingsPageComponent,
+    NewsSettingsPageComponent,
+    CardNewsComponent,
+    SingleNewsComponent
   ],
   imports: [
     BrowserModule,
@@ -62,6 +93,10 @@ import { HomeSettingsPageComponent } from './pages/home-settings-page/home-setti
     AngularFireStorageModule,
     AngularFireAuthModule,
     ClickOutsideModule,
+    ContenteditableModule,
+    NgSelectModule,
+    NgxPageScrollModule,
+    SnotifyModule
   ],
   providers: [
     AppComponent,
@@ -69,6 +104,15 @@ import { HomeSettingsPageComponent } from './pages/home-settings-page/home-setti
       provide: HTTP_INTERCEPTORS,
       useClass: RequestInterceptor,
       multi: true
+    },
+    {
+      provide: 'SnotifyToastConfig',
+      useValue: ToastDefaults
+    },
+    SnotifyService,
+    {
+      provide: HAMMER_GESTURE_CONFIG,
+      useClass: MyHammerConfig
     }
   ],
   bootstrap: [AppComponent]

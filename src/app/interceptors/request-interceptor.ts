@@ -9,12 +9,15 @@ import {
 import {Observable, throwError} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {AuthService} from '../authentication/auth.service';
-import {Router, RouterStateSnapshot} from '@angular/router';
+import {Router} from '@angular/router';
+import {AppComponent} from '../app.component';
 
 @Injectable()
 export class RequestInterceptor implements HttpInterceptor {
 
-  constructor(private authenticationService: AuthService, private router: Router) {}
+  env = this.appComponent.env;
+
+  constructor(private authenticationService: AuthService, private router: Router, private appComponent: AppComponent) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
@@ -26,31 +29,25 @@ export class RequestInterceptor implements HttpInterceptor {
     });
     return next.handle(cloned)
       .pipe(
-        // catchError(err => {
-        //   if (err.status === 401) {
-        //     // auto logout if 401 response returned from api
-        //     this.authenticationService.logout();
-        //     this.router.navigate(['/auth/login'], { queryParams: { returnUrl: this.router.url }});
-        //   }
-        //
-        //   const error = err.error.message || err.statusText;
-        //   return throwError(error);
-        // }),
+        catchError(err => {
+          console.log('Error! Status: ' + err.status + ' Message: ' + err.error.message);
+           if (err.status === 401) {
+             // auto logout if 401 response returned from api
+             this.authenticationService.logout(this.env.apiUrl);
+             this.router.navigate(['/auth/login'], { queryParams: { returnUrl: this.router.url }});
+           }
+          this.appComponent.createErrorNotification(
+            'Errore dal server!',
+            'Alcune modifiche potrebbero non essere state salvate! Riprovare più tardi.');
+           const error = err.error.message || err.statusText;
+           return throwError(error);
+         }),
         tap(event => {
           if (event instanceof HttpResponse) {
-
             console.log(' all looks good');
             // http response status code
             console.log(event.status);
           }
-        }, error => {
-          // http response status code
-          console.log('----response----');
-          console.error('status code:');
-          console.error(error.status);
-          console.error(error.message);
-          console.log('--- end of response---');
-
         })
       );
   }

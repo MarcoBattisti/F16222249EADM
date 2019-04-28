@@ -24,9 +24,23 @@
   font-weight: 300;
 }
 
+.setting-header-border {
+  border-left: 4px black solid;
+  display: inline-block;
+  padding: 4px;
+}
+
 .save-highlight{
   border: 3px #ad2d00 solid;
   -webkit-transition : border 500ms ease-out;
   -moz-transition : border 500ms ease-out;
   -o-transition : border 500ms ease-out;
+}
+
+.block-18 .text span {
+  display: block;
+}
+.text {
+  display: block;
+  width: 100%;
 }
