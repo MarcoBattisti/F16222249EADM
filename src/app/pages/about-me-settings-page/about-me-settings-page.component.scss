@@ -1,0 +1,65 @@
+$timeline-background-style: 0deg;
+$timeline-background-first-color:rgba(226,226,226,1) 0%;
+$timeline-background-second-color: rgba(235,235,235,1) 100%;
+
+
+.intro-card {
+  border-top-width: 0;
+  border-bottom-width: 2px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.intro-card.hovercard {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.intro-card.hovercard .cardheader {
+  background-color: #404040;
+  height: 300px;
+}
+
+.intro-card.hovercard .avatar {
+  position: relative;
+  top: -175px;
+  margin-bottom: -175px;
+}
+
+.intro-card.hovercard .avatar img {
+  max-width: 450px;
+  max-height: 350px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  border: 5px solid rgba(255,255,255,0.5);
+}
+
+.intro-card.hovercard .info {
+  padding: 25px 8px 25px;
+}
+
+.intro-card.hovercard .info .title {
+  margin-bottom: 4px;
+  font-size: 35px;
+  line-height: 1;
+  color: #262626;
+  vertical-align: middle;
+}
+
+.intro-card.hovercard .info .desc {
+  overflow: hidden;
+  font-size: 16px;
+  line-height: 20px;
+  color: #cecece;
+  text-overflow: ellipsis;
+}

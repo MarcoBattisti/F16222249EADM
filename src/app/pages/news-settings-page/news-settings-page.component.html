@@ -50,7 +50,7 @@
     </div>
   </div>
 
-  <div class="clr-row m-1">
+  <div *ngIf="pagedPostsAreLoaded && listOfPosts != null && listOfPosts.length > 0" class="clr-row m-1">
     <!-- [START] NG SELECT column [START] -->
     <div class="clr-col-md-1 clr-col-4">
       <ng-select
