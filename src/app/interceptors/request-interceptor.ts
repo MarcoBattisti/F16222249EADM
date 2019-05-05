@@ -35,10 +35,14 @@ export class RequestInterceptor implements HttpInterceptor {
              // auto logout if 401 response returned from api
              this.authenticationService.logout(this.env.apiUrl);
              this.router.navigate(['/auth/login'], { queryParams: { returnUrl: this.router.url }});
+             this.appComponent.createErrorNotification(
+               'Errore di autenticazione!',
+               'Riprova ad eseguire il login.');
+           } else {
+             this.appComponent.createErrorNotification(
+               'Errore dal server!',
+               'Alcune modifiche potrebbero non essere state salvate! Riprovare più tardi.');
            }
-          this.appComponent.createErrorNotification(
-            'Errore dal server!',
-            'Alcune modifiche potrebbero non essere state salvate! Riprovare più tardi.');
            const error = err.error.message || err.statusText;
            return throwError(error);
          }),

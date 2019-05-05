@@ -17,10 +17,10 @@
           </div>
           <!-- Tag -->
           <div class="clr-row pt-1">
-            <div class="clr-col-3 clr-col-md-1">
+            <div class="clr-col-3 clr-col-md-2">
               <clr-icon shape="tag" class="is-success"></clr-icon> Tag:
             </div>
-            <div class="clr-col clr-col-md-3 fit-content" [exclude]="'ng-snotify, clr-header, clr-vertical-nav'" (clickOutside)="saveText(saveTag)">
+            <div class="clr-col clr-col-md-5 fit-content" [exclude]="'ng-snotify, clr-header, clr-vertical-nav'" (clickOutside)="saveText(saveTag)">
               <ng-select
                 [(ngModel)] = "post.topic"
                 (ngModelChange)="saveTag = true"
@@ -52,7 +52,7 @@
           </div>
           <hr>
           <div class="clr-row">
-            <div class="clr-col-3 clr-col-md-1">
+            <div class="clr-col-3 clr-col-md-2">
               <p>Autore: </p>
             </div>
             <div class="fit-content" [exclude]="'ng-snotify, clr-header, clr-vertical-nav'" (clickOutside)="saveText(saveAuthor)">

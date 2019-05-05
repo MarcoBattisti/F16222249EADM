@@ -96,7 +96,7 @@ export class NewsSettingsPageComponent implements OnInit {
           );
           this.appComponent.createSuccessNotification(
             'Salvata!',
-            'La notizia è stata aggiornata come importante!');
+            'La notizia è stata aggiornata correttamente!');
         }
       );
   }

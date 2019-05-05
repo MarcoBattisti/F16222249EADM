@@ -1,0 +1,38 @@
+<div class="timeline-container text-center" *ngIf="settings != null">
+
+  <div class="intro-card hovercard mb-5">
+    <div class="cardheader">
+      <div class="info">
+        <div class="title text-white">
+          <h3><b>Lisa Battisti</b></h3>
+        </div>
+        <div class="desc"><i>Dott.ssa Psicologa</i></div>
+      </div>
+    </div>
+    <div class="avatar">
+      <input [hidden]="true" type="file" (change)="uploadImage($event)" accept="image/*" #file/>
+      <img alt="" [src]="findSettingByName('image').value" (click)="file.click()">
+    </div>
+  </div>
+
+  <clr-tabs>
+    <clr-tab>
+      <button clrTabLink id="link1">Introduzione</button>
+      <clr-tab-content [ngClass]="saveIntroduction ? 'save-highlight' : '' " id="content1">
+        <div class="desc" [exclude]="'ng-snotify, clr-header, clr-vertical-nav'" (clickOutside)="saveIntroductionText()">
+          <ckeditor [editor]="Editor" (change)="onChange($event)" data="{{findSettingByName(this.properties[1]).value}}"></ckeditor>
+        </div>
+      </clr-tab-content>
+    </clr-tab>
+    <clr-tab>
+      <button clrTabLink id="link2">Formazione/Esperienze</button>
+      <clr-tab-content id="content2">
+        <div class="clr-toggle-wrapper m-1">
+          <input type="checkbox" id="toggle1" name="toggle-basic" value="option1" [(ngModel)]="moveEvent" class="clr-toggle">
+          <label for="toggle1">Modalità ordinamento</label>
+        </div>
+        <app-timeline [(moveMode)]="moveEvent" class="m-5"></app-timeline>
+      </clr-tab-content>
+    </clr-tab>
+  </clr-tabs>
+</div>

@@ -134,7 +134,7 @@ export class SingleNewsComponent implements OnInit {
           );
           this.appComponent.createSuccessNotification(
             'Salvata!',
-            'La notizia è stata aggiornata come importante!');
+            'La notizia è stata aggiornata correttamente!');
         }
       );
   }
@@ -145,7 +145,7 @@ export class SingleNewsComponent implements OnInit {
       error => { console.log(error); },
       () => {
         this.openNewsDeleteModal = false;
-        this.router.navigate(['admin/pages/news-page']);
+        this.router.navigate(['admin/pages/news-settings']);
         this.appComponent.createSuccessNotification(
           'Eliminata!',
           'La notizia è stata eliminata correttamente!');
@@ -160,7 +160,7 @@ export class SingleNewsComponent implements OnInit {
         data => { this.id = data.id; },
         error => {},
         () => {
-          this.router.navigate(['admin/pages/news-page/' + this.id]);
+          this.router.navigate(['admin/pages/news-settings/' + this.id]);
           this.appComponent.createSuccessNotification(
             'Create!',
             'La notizia è stata creata correttamente!');

@@ -1,0 +1,144 @@
+<div class="container-fluid ">
+  <div class="clr-row clr-justify-content-center">
+    <ul *ngIf="!moveMode" class="clr-col timeline">
+        <li class="rounded-3" *ngFor="let event of timelineEvents; let i = index;"
+            [exclude]="'ng-snotify, clr-header, clr-vertical-nav'" (clickOutside)="updateTimelineEventById(i, event)">
+
+          <div class="clr-row clr-align-items-center clr-justify-content-end w-50">
+            <div class="clr-col-2">
+              <div [ngClass]="openDropdown && dropdownId === i ? 'open' : ''" class="dropdown bottom-left">
+                <button type="button" class="dropdown-toggle" (click)="openDropdown = !openDropdown; dropdownId = i;">
+                  <clr-icon shape="cog" size="24"></clr-icon>
+                  <clr-icon shape="caret down"></clr-icon>
+                </button>
+                <div class="dropdown-menu">
+                  <ng-select
+
+                    [items]="timelineIcons"
+                    [(ngModel)]="event.icon"
+                    name="eventIcon"
+                    (ngModelChange)="saveTimeline = true; timelineChanged = i;">
+                    <ng-template ng-label-tmp ng-option-tmp let-item="item" >
+                      <fa-icon [icon]="item"></fa-icon>
+                    </ng-template>
+                  </ng-select>
+                  <button type="button" class="dropdown-item"
+                          [(colorPicker)]="color"
+                          [style.background]="event.color"
+                          [cpPosition]="'bottom'"
+                          (colorPickerChange)="event.color = color; saveTimeline = true; timelineChanged = i;"
+                          name="colorEvent">Colore</button>
+                  </div>
+              </div>
+            </div>
+            <div class="clr-col-2">
+              <a (click)="openDeleteModal(event)"><clr-icon shape="trash" class="is-error" size="25"></clr-icon></a>
+            </div>
+          </div>
+
+          <clr-modal *ngIf="openEventDeleteModal" [ngModel]="modalEvent"  [(clrModalOpen)]="openEventDeleteModal" name="modalPost" ngDefaultControl>
+            <h3 class="modal-title">Eliminare</h3>
+            <div class="modal-body">
+              <p>Sei sicuro/a di voler eliminare questo evento?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline" (click)="openEventDeleteModal = false">Indietro</button>
+              <button type="button" class="btn btn-primary" (click)="delete(modalEvent.id)">Ok</button>
+            </div>
+          </clr-modal>
+
+          <div class="timeline-badge" [ngStyle]="{'background-color': event.color}">
+            <fa-icon [icon]="event.icon"></fa-icon>
+          </div>
+          <div class="card timeline-panel" [ngStyle]="{'border': '1px solid ' + event.color}">
+            <!--Card content-->
+            <div class="card-block p-0">
+
+              <div [ngStyle]="{'background-color': event.color}">
+              <!--Title-->
+                <div>
+                  <h4 class="card-header text-white m-0" contenteditable="true" [(ngModel)]="event.title" (ngModelChange)="saveTimeline = true; timelineChanged=i;" name="eventTitle" ngDefaultControl>{{event.title}}</h4>
+                </div>
+              </div>
+
+              <div class="p-1">
+                <!--Text-->
+                <div class="card-text">
+                  <ckeditor [editor]="Editor" (change)="onChange(i, $event)" data="{{event.text}}"></ckeditor>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="rounded-3" *ngIf="creationMode">
+          <div class="clr-row clr-align-items-center clr-justify-content-end w-50">
+            <div class="clr-col-2">
+              <div [ngClass]="openDropdown && dropdownId === 240997 ? 'open' : ''" class="dropdown bottom-left">
+                <button type="button" class="dropdown-toggle" (click)="openDropdown = !openDropdown; dropdownId = 240997;">
+                  <clr-icon shape="cog" size="24"></clr-icon>
+                  <clr-icon shape="caret down"></clr-icon>
+                </button>
+                <div class="dropdown-menu">
+                  <ng-select
+                    [items]="timelineIcons"
+                    [(ngModel)]="tempTimelineEvent.icon"
+                    name="eventIcon">
+                    <ng-template ng-label-tmp ng-option-tmp let-item="item" >
+                      <fa-icon [icon]="item"></fa-icon>
+                    </ng-template>
+                  </ng-select>
+                  <button type="button" class="dropdown-item"
+                          [(colorPicker)]="color"
+                          [style.background]="tempTimelineEvent.color"
+                          (colorPickerChange)="tempTimelineEvent.color = color"
+                          [cpPosition]="'bottom'"
+                          name="colorEvent">Colore</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="timeline-badge" [ngStyle]="{'background-color': tempTimelineEvent.color}">
+            <fa-icon [icon]="tempTimelineEvent.icon"></fa-icon>
+          </div>
+          <div class="card timeline-panel" [ngStyle]="{'border': '1px solid ' + tempTimelineEvent.color}">
+            <!--Card content-->
+            <div class="card-block p-0">
+
+              <div [ngStyle]="{'background-color': tempTimelineEvent.color}">
+                <!--Title-->
+                <div>
+                  <h4 class="card-header text-white m-0" contenteditable="true" [(ngModel)]="tempTimelineEvent.title" name="eventTitle" ngDefaultControl>
+                    {{tempTimelineEvent.title}}
+                  </h4>
+                </div>
+              </div>
+
+              <div class="p-1">
+                <!--Text-->
+                <div class="card-text">
+                  <ckeditor [editor]="Editor" (change)="onChangeTempEventText($event)" data="{{tempTimelineEvent.text}}"></ckeditor>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <div class="p-1 w-50">
+          <button *ngIf="!creationMode" type="button" class="btn btn-primary" (click)="createNewTimelineEvent()">
+            <clr-icon shape="plus"></clr-icon> Crea nuovo evento
+          </button>
+          <button *ngIf="creationMode" type="button" class="btn btn-success" (click)="createTimelineEvent()">Salva</button>
+          <button *ngIf="creationMode" type="button" class="btn btn-danger" (click)="creationMode = false">Cancella</button>
+        </div>
+
+    </ul>
+
+    <div *ngIf="moveMode" cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+      <div [style.background]="event.color" class="m-1 example-box" *ngFor="let event of timelineEvents" cdkDrag>
+        <fa-icon [icon]="event.icon"></fa-icon> {{event.title}}
+      </div>
+    </div>
+
+  </div>
+</div>

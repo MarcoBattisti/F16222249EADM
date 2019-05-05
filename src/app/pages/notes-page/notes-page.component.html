@@ -1,12 +1,91 @@
-<div class="content-area clr-row">
-  <div class="clr-col clr-col-md-2 card card-block">
-    <div class="card-header clr-row clr-align-content-center clr-justify-content-center p-0">
-      <h3 class="clr-col card-title">To do</h3>
-      <a class="clr-col-3 clr-col-md-2"><clr-icon shape="note" size="20"></clr-icon></a>
-      <a class="clr-col-3 clr-col-md-2"><clr-icon shape="trash" class="is-error" size="20"></clr-icon></a>
+<div class="content-area ">
+
+  <button type="button" class="btn btn-primary-outline" (click)="showCreationModal('Crea nuova nota')">Crea nuova nota</button>
+
+  <div class="clr-row">
+    <div class="ml-1 clr-col clr-col-md-2 card card-block" *ngFor="let note of notes; let i = index;">
+      <div class="card-header clr-row clr-align-content-center clr-justify-content-center p-0">
+        <h3 class="clr-col card-title">{{note.title}}</h3>
+        <a class="clr-col-3 clr-col-md-2" (click)="showUpdateModal('Modifica la nota', i)"><clr-icon shape="note" size="20"></clr-icon></a>
+        <a class="clr-col-3 clr-col-md-2" (click)="deleteNote(note.id)"><clr-icon shape="trash" class="is-error" size="20"></clr-icon></a>
+      </div>
+      <div class="card-text" *ngIf="note.type == 'default'">
+        <p *ngFor="let content of note.contents">{{content.value}}</p>
+      </div>
+      <div class="card-text" *ngIf="note.type == 'toDo'">
+        <div class="mt-1">
+          <clr-checkbox-wrapper *ngFor="let content of note.contents">
+            <input type="checkbox" clrCheckbox valueAsNumber="done" [(ngModel)]="content.done" [name]="'content_' + content.id + '_done'" />
+            <label>{{content.value}}</label>
+          </clr-checkbox-wrapper>
+        </div>
+      </div>
     </div>
-    <p class="card-text">
-      123456789123456789123456789123456789123456789
-    </p>
+
   </div>
+
+
+  <clr-modal *ngIf="openModal" [(clrModalOpen)]="openModal" [clrModalClosable]="false">
+    <h3 class="modal-title">{{modalTitle}}</h3>
+    <div class="modal-body">
+
+      <!-- Note Type -->
+      <clr-radio-container clrInline>
+        <label>Tipo</label>
+        <clr-radio-wrapper>
+          <input type="radio" clrRadio name="options" required value="default" [(ngModel)]="modalNote.type" [disabled]="isUpdate"/>
+          <label>Default</label>
+        </clr-radio-wrapper>
+        <clr-radio-wrapper>
+          <input type="radio" clrRadio name="options" required value="toDo" [(ngModel)]="modalNote.type" [disabled]="isUpdate"/>
+          <label>To do</label>
+        </clr-radio-wrapper>
+        <clr-control-helper *ngIf="!isUpdate">Seleziona il tipo di nota</clr-control-helper>
+        <clr-control-error >Campo richiesto!</clr-control-error>
+      </clr-radio-container>
+
+      <form clrForm>
+        <clr-input-container>
+          <label>Titolo</label>
+          <input placeholder="Titolo" clrInput [(ngModel)]="modalNote.title" name="title" required />
+          <clr-control-helper>Inserisci il titolo della nota</clr-control-helper>
+          <clr-control-error>Campo richiesto!</clr-control-error>
+        </clr-input-container>
+
+        <!-- Default Note -->
+        <div *ngIf="modalNote.type == 'default'">
+          <clr-input-container *ngFor="let content of modalNote.contents">
+            <label>Contenuto</label>
+            <input placeholder="Contenuto" clrInput [(ngModel)]="content.value" name="content" required />
+            <clr-control-helper>Inserisci il contenuto della nota</clr-control-helper>
+            <clr-control-error>Campo richiesto!</clr-control-error>
+          </clr-input-container>
+        </div>
+
+        <!-- To-Do Note -->
+        <div class="clr-row mt-1" *ngIf="modalNote.type == 'toDo'">
+          <div class="clr-col-2 clr-col-md-1">
+            <a (click)="pushContent()"><clr-icon shape="plus-circle"></clr-icon></a>
+          </div>
+          <div class="clr-col">
+            <div class="clr-row" *ngFor="let content of modalNote.contents; let i = index;">
+              <clr-input-container class="clr-col mt-0 pb-1">
+                <input placeholder="Contenuto" clrInput [(ngModel)]="content.value" [name]="'content_' + i" required />
+                <clr-control-error>Campo richiesto!</clr-control-error>
+              </clr-input-container>
+              <div class="clr-col">
+                <a *ngIf="i != 0" (click)="modalNote.contents.splice(i, 1)"><clr-icon shape="times"></clr-icon></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline" (click)="openModal = false; isUpdate = false;">Cancel</button>
+      <button type="button" class="btn btn-primary" (click)="saveNote()">Salva</button>
+    </div>
+  </clr-modal>
+
 </div>

@@ -22,6 +22,12 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxPageScrollModule } from 'ngx-page-scroll';
 import {SnotifyModule, SnotifyService, SnotifyToastConfig, ToastDefaults} from 'ng-snotify';
 import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ColorPickerModule } from 'ngx-color-picker';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
 
 import {RequestInterceptor} from './interceptors/request-interceptor';
 import { Error404Component } from './error-pages/error404/error404.component';
@@ -33,6 +39,10 @@ import { HomeSettingsPageComponent } from './pages/home-settings-page/home-setti
 import { NewsSettingsPageComponent } from './pages/news-settings-page/news-settings-page.component';
 import {CardNewsComponent} from './pages/news-settings-page/components/card-news/card-news.component';
 import {SingleNewsComponent} from './pages/news-settings-page/components/single-news/single-news.component';
+import { AboutMeSettingsPageComponent } from './pages/about-me-settings-page/about-me-settings-page.component';
+import {TimelineComponent} from './pages/about-me-settings-page/timeline/timeline.component';
+
+library.add(fas, far);
 
 declare var Hammer: any;
 export class MyHammerConfig extends HammerGestureConfig {
@@ -66,7 +76,9 @@ export class MyHammerConfig extends HammerGestureConfig {
     HomeSettingsPageComponent,
     NewsSettingsPageComponent,
     CardNewsComponent,
-    SingleNewsComponent
+    SingleNewsComponent,
+    AboutMeSettingsPageComponent,
+    TimelineComponent
   ],
   imports: [
     BrowserModule,
@@ -96,7 +108,10 @@ export class MyHammerConfig extends HammerGestureConfig {
     ContenteditableModule,
     NgSelectModule,
     NgxPageScrollModule,
-    SnotifyModule
+    SnotifyModule,
+    FontAwesomeModule,
+    ColorPickerModule,
+    DragDropModule
   ],
   providers: [
     AppComponent,
